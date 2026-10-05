@@ -2,7 +2,7 @@ import { Storage, User, Device, Share, Game, loadFullScreenAd, showFullScreenAd 
 import handGif from './hand.gif';
 import purrUrl from './purr.mp3';
 
-const APP_NAME = 'petpetapp'; // apps-in-toss.config.ts의 appName과 같아야 해요
+const APP_NAME = 'petpet-cat'; // apps-in-toss.config.ts의 appName과 같아야 해요
 const AD_ID = 'ait-ad-test-rewarded-id'; // 테스트용 보상형 광고 ID. 출시 전에 콘솔에서 발급한 ID로 교체하세요
 const KEY = 'petpetapp.save';
 let saveKey = KEY; // 사용자 식별키를 받으면 `${KEY}.${hash}`로 바뀌어요 (계정마다 저장 데이터 분리)

@@ -20,7 +20,7 @@ header { width: 100%; display: flex; justify-content: space-between; align-items
 #next { font-size: 14px; color: #8a5a78; }
 body.dark #next { color: #cbb7d9; }
 #stage { position: relative; flex: 1; width: 100%; min-height: 0; }
-#pet { width: 100%; height: 100%; border: 0; background: none; font-size: min(55vw, 220px); line-height: 1; cursor: pointer; }
+#pet { width: 100%; height: 100%; border: 0; background: none; font-size: min(55vw, 220px, 30vh); line-height: 1; cursor: pointer; }
 #pet.hit { animation: squish .12s; }
 #pet.evolve { animation: evolve .9s; }
 @keyframes squish { 50% { transform: scale(.88, 1.08); } }
