@@ -1,0 +1,8 @@
+node_modules
+dist
+*.ait
+.env
+docs/
+llms.txt
+llms-full.txt
+urls.txt
