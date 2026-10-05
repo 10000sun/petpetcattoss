@@ -12,10 +12,23 @@
       <div id="count">0</div>
       <div id="coins">🪙 0</div>
     </header>
+    <nav id="tools">
+      <button id="snd" aria-label="소리">🔊</button>
+      <button id="rank" aria-label="순위">🏆</button>
+      <button id="share" aria-label="공유">📤</button>
+      <button id="daily" aria-label="출석 보상">🎁</button>
+      <button id="shopBtn" aria-label="상점">🛍️</button>
+    </nav>
+    <div class="stats">
+      <span>🍖<div class="meter"><i id="hunger"></i></div></span>
+      <span>💗<div class="meter"><i id="mood"></i></div></span>
+    </div>
     <div id="bar"><i id="fill"></i></div>
     <div id="next"></div>
-    <button id="pet" aria-label="펫 쓰다듬기">🐱</button>
+    <div id="stage"><button id="pet" aria-label="펫 쓰다듬기">🐱</button><span id="hat"></span></div>
     <section id="rewards"></section>
+    <section id="shop" hidden></section>
+    <div id="toast"></div>
   </main>
   <script type="module" src="/src/main.js"></script>
 </body>
