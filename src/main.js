@@ -1,4 +1,5 @@
 import { Storage } from '@apps-in-toss/web-framework';
+import handGif from './hand.gif';
 
 // 목표 횟수와 보상 코인
 const MILESTONES = [
@@ -37,14 +38,19 @@ function render() {
   }).join('');
 }
 
-$('pet').addEventListener('pointerdown', (e) => {
+$('pet').addEventListener('pointerdown', () => {
   s.taps++; dirty = true;
   const pet = $('pet');
   pet.classList.remove('hit'); void pet.offsetWidth; pet.classList.add('hit');
-  const p = document.createElement('div');
-  p.className = 'pop'; p.textContent = '+1';
-  p.style.left = `${e.clientX - 12}px`; p.style.top = `${e.clientY - 30}px`;
-  document.body.append(p); setTimeout(() => p.remove(), 700);
+  // 쓰다듬는 손: 터치 위치와 상관없이 고양이 이마(얼굴 중앙에서 위쪽)에 손끝이 오도록 고정해요.
+  // 터치마다 새로 띄우고 GIF 재생 시간(1.1초)이 지나면 지워요.
+  const r = pet.getBoundingClientRect(), fs = parseFloat(getComputedStyle(pet).fontSize), w = fs * 0.73;
+  const hand = new Image();
+  hand.className = 'hand'; hand.src = handGif; hand.style.width = `${w}px`;
+  hand.style.left = `${r.left + r.width / 2 - w * 0.917}px`;
+  hand.style.top = `${r.top + r.height / 2 - fs * 0.3 - w * 0.4}px`;
+  document.body.append(hand);
+  setTimeout(() => hand.remove(), 1100);
   render();
 });
 
