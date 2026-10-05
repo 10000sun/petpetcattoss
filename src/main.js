@@ -1,10 +1,11 @@
-import { Storage, Device, Share, Game, loadFullScreenAd, showFullScreenAd } from '@apps-in-toss/web-framework';
+import { Storage, User, Device, Share, Game, loadFullScreenAd, showFullScreenAd } from '@apps-in-toss/web-framework';
 import handGif from './hand.gif';
 import purrUrl from './purr.mp3';
 
 const APP_NAME = 'petpetapp'; // apps-in-toss.config.ts의 appName과 같아야 해요
 const AD_ID = 'ait-ad-test-rewarded-id'; // 테스트용 보상형 광고 ID. 출시 전에 콘솔에서 발급한 ID로 교체하세요
 const KEY = 'petpetapp.save';
+let saveKey = KEY; // 사용자 식별키를 받으면 `${KEY}.${hash}`로 바뀌어요 (계정마다 저장 데이터 분리)
 
 // 업적: 누적 터치 횟수와 보상 코인
 const MILESTONES = [
@@ -54,7 +55,7 @@ const store = {
   get: async (k) => { try { return await Storage.getItem(k); } catch { return localStorage.getItem(k); } },
   set: async (k, v) => { try { await Storage.setItem(k, v); } catch { localStorage.setItem(k, v); } },
 };
-const save = () => { if (dirty) { dirty = false; s.lastSeen = Date.now(); store.set(KEY, JSON.stringify(s)); } };
+const save = () => { if (dirty) { dirty = false; s.lastSeen = Date.now(); store.set(saveKey, JSON.stringify(s)); } };
 const touch = () => { dirty = true; };
 
 const safe = (fn) => { try { return Promise.resolve(fn()).catch(() => {}); } catch { return Promise.resolve(); } };
@@ -312,7 +313,15 @@ setInterval(() => { decay(1); touch(); render(); }, 60000);
 setInterval(save, 1000);
 window.addEventListener('resize', layoutHat);
 
-store.get(KEY)
+// 게임 미니앱은 사용자 식별키(User.getAnonymousKey)를 발급받아 저장 데이터를 사용자별로 구분해요.
+// 지원하지 않는 환경(구버전 토스 앱 등)이거나 3초 안에 못 받으면 기본 키로 시작해요.
+const userKey = () => Promise.race([
+  Promise.resolve().then(() => User.getAnonymousKey()).then((r) => r?.hash || 'local'),
+  new Promise((r) => setTimeout(() => r('local'), 3000)),
+]).catch(() => 'local');
+
+userKey()
+  .then((hash) => { saveKey = `${KEY}.${hash}`; return store.get(saveKey); })
   .then((v) => { if (v) { s = { ...s, ...JSON.parse(v) }; decay((Date.now() - s.lastSeen) / 60000); } })
   .catch(() => {})
   .finally(() => { s.lastSeen = Date.now(); render(); loadAd(); });
